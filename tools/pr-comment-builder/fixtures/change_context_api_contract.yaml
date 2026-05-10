@@ -1,0 +1,35 @@
+# changeContext emitted by the idp-preview operator for the demo/api-contract-change branch.
+# Paste this file as --change-context when running the PR comment builder manually.
+apiVersion: preview.cellenza.io/v1alpha1
+kind: ChangeContext
+pr: 43
+branch: demo/api-contract-change
+commit: abc1234
+
+diff:
+  filesChanged:
+    - app.py
+    - api/openapi.yaml
+  additions: 18
+  deletions: 3
+
+detectedImpacts:
+  backend: true
+  apiContract: true
+  databaseMigration: false
+  frontend: false
+  tests: true
+  docs: false
+
+triggeredSuites:
+  - unit
+  - regression
+  - contract
+  - migration
+skippedSuites:
+  - e2e
+
+reason: >
+  api/openapi.yaml and app.py were both modified. Contract tests are required to
+  verify that the implementation still matches the declared API spec. Regression
+  tests run because backend logic changed. E2E skipped: no frontend file changed.

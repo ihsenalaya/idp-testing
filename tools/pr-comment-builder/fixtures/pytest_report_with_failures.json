@@ -1,0 +1,94 @@
+{
+  "created": 1746870000.0,
+  "duration": 12.4,
+  "exitcode": 1,
+  "root": "/app",
+  "environment": {
+    "Python": "3.10.12",
+    "Platform": "linux"
+  },
+  "summary": {
+    "passed": 24,
+    "failed": 2,
+    "skipped": 3,
+    "total": 29
+  },
+  "tests": [
+    {
+      "nodeid": "tests/unit/test_pricing.py::test_zero_discount_returns_original_price",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "nodeid": "tests/unit/test_pricing.py::test_ten_percent_discount",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "nodeid": "tests/regression/test_oversell_protection.py::test_order_refused_when_stock_insufficient",
+      "outcome": "passed",
+      "duration": 0.24
+    },
+    {
+      "nodeid": "tests/regression/test_oversell_protection.py::test_stock_decremented_after_valid_order",
+      "outcome": "passed",
+      "duration": 0.18
+    },
+    {
+      "nodeid": "tests/regression/test_order_total_includes_discount.py::test_order_response_includes_total_price",
+      "outcome": "failed",
+      "duration": 0.21,
+      "call": {
+        "longrepr": "AssertionError: KAGENT DEMO FAILURE: order response missing `total_price` field. POST /api/orders returns: ['id', 'product_id', 'quantity', 'status', 'created_at']\nassert 'total_price' in {'created_at': '2026-05-10T10:00:00+00:00', 'id': 5, 'product_id': 3, 'quantity': 3, 'status': 'pending'}"
+      }
+    },
+    {
+      "nodeid": "tests/regression/test_payment_idempotency.py::test_second_payment_for_same_order_returns_409",
+      "outcome": "failed",
+      "duration": 0.33,
+      "call": {
+        "longrepr": "AssertionError: KAGENT DEMO FAILURE: duplicate payment was accepted (got 201). The payments endpoint must reject duplicate payments with HTTP 409.\nassert 201 == 409"
+      }
+    },
+    {
+      "nodeid": "tests/migration/test_migrations.py::TestMigration001::test_upgrade_creates_base_tables",
+      "outcome": "passed",
+      "duration": 1.2
+    },
+    {
+      "nodeid": "tests/migration/test_migrations.py::TestMigration002::test_upgrade_creates_payments_table",
+      "outcome": "passed",
+      "duration": 0.9
+    },
+    {
+      "nodeid": "tests/migration/test_migrations.py::TestMigration003::test_full_up_down_cycle",
+      "outcome": "passed",
+      "duration": 2.1
+    },
+    {
+      "nodeid": "tests/contract/test_schemathesis.py::test_healthz_returns_ok",
+      "outcome": "passed",
+      "duration": 0.05
+    },
+    {
+      "nodeid": "tests/contract/test_schemathesis.py::test_products_list_conforms_to_schema",
+      "outcome": "passed",
+      "duration": 0.12
+    },
+    {
+      "nodeid": "tests/e2e.py::test_catalog_page_loads",
+      "outcome": "skipped",
+      "duration": 0.01
+    },
+    {
+      "nodeid": "tests/e2e.py::test_product_detail_panel",
+      "outcome": "skipped",
+      "duration": 0.01
+    },
+    {
+      "nodeid": "tests/e2e.py::test_discount_filter",
+      "outcome": "skipped",
+      "duration": 0.01
+    }
+  ]
+}

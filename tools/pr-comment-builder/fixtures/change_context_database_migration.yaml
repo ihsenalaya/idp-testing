@@ -1,0 +1,34 @@
+# changeContext emitted by the idp-preview operator for the demo/database-migration branch.
+apiVersion: preview.cellenza.io/v1alpha1
+kind: ChangeContext
+pr: 45
+branch: demo/database-migration
+commit: def5678
+
+diff:
+  filesChanged:
+    - migrations/versions/004_add_order_status_index.py
+  additions: 22
+  deletions: 0
+
+detectedImpacts:
+  backend: false
+  apiContract: false
+  databaseMigration: true
+  frontend: false
+  tests: false
+  docs: false
+
+triggeredSuites:
+  - migration
+  - regression
+skippedSuites:
+  - unit
+  - contract
+  - e2e
+
+reason: >
+  A new Alembic migration file was added. The operator enables migration tests
+  (up + down round-trip) and regression tests to verify that existing queries
+  still work after the schema change. Contract and E2E tests are skipped because
+  neither the API spec nor the frontend was modified.

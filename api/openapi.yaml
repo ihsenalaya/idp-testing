@@ -427,6 +427,109 @@ paths:
                     created_at: '2026-05-01T11:00:00+00:00'
         '500':
           $ref: '#/components/responses/InternalError'
+  /readyz:
+    get:
+      operationId: readinessCheck
+      summary: Readiness probe — verifies database connectivity
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Service is ready and DB is reachable
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                - ready
+              examples:
+                Example_1:
+                  value: ready
+        '503':
+          description: Service not ready (DB unreachable)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/payments:
+    post:
+      operationId: createPayment
+      summary: Process a payment for an existing order
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreate'
+            examples:
+              Example_1:
+                value:
+                  order_id: 1
+                  amount: 99.00
+                  method: card
+      responses:
+        '201':
+          description: Payment processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+              examples:
+                Example_1:
+                  value:
+                    id: 1
+                    order_id: 1
+                    amount: 99.00
+                    method: card
+                    transaction_id: 550e8400-e29b-41d4-a716-446655440000
+                    status: completed
+                    created_at: '2026-05-10T10:00:00+00:00'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: order_id and amount are required
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: order not found
+        '500':
+          $ref: '#/components/responses/InternalError'
+    get:
+      operationId: listPayments
+      summary: List the last 50 payments
+      tags:
+      - Payments
+      responses:
+        '200':
+          description: Array of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+              examples:
+                Example_1:
+                  value:
+                  - id: 1
+                    order_id: 1
+                    amount: 99.00
+                    method: card
+                    transaction_id: 550e8400-e29b-41d4-a716-446655440000
+                    status: completed
+                    created_at: '2026-05-10T10:00:00+00:00'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /api/stats:
     get:
       operationId: getStats
@@ -866,6 +969,59 @@ components:
           type: array
           items:
             type: string
+    PaymentCreate:
+      type: object
+      required:
+      - order_id
+      - amount
+      properties:
+        order_id:
+          type: integer
+          minimum: 1
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        method:
+          type: string
+          default: card
+          enum:
+          - card
+          - bank_transfer
+          - wallet
+    PaymentResponse:
+      type: object
+      required:
+      - id
+      - order_id
+      - amount
+      - method
+      - transaction_id
+      - status
+      - created_at
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        order_id:
+          type: integer
+          minimum: 1
+        amount:
+          type: number
+          format: float
+        method:
+          type: string
+        transaction_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - completed
+          - failed
+          - refunded
+        created_at:
+          type: string
+          format: date-time
     ErrorResponse:
       type: object
       required:
@@ -887,3 +1043,5 @@ tags:
   description: Order placement
 - name: Stats
   description: Aggregated platform statistics
+- name: Payments
+  description: Payment processing via fake PSP

@@ -1,0 +1,18 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--json-report",
+    "--json-report-file=test-reports/pytest-report.json",
+    "--json-report-indent=2",
+]
+markers = [
+    "requires_db: test needs a live PostgreSQL database (set DATABASE_URL)",
+    "requires_api: test needs a running API server (set APP_URL)",
+    "kagent_demo: intentionally-failing test used to demonstrate kagent AI analysis",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
