@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+APP_VERSION = "1.0.1"
+
 
 @app.after_request
 def cors(response):
